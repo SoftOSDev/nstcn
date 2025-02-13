@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简透明起始页</title>
+    <style>
+        :root {
+            --primary-color: rgba(108, 122, 224, 0.9);
+            --success-color: rgba(76, 175, 80, 0.9);
+            --danger-color: rgba(255, 107, 107, 0.9);
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'PingFang SC', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #000000, #333333, #666666, #ffffff);
+            background-size: cover;
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .background-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 680px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            margin: 1rem;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .search-group {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        #search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        #search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 8px rgba(108, 122, 224, 0.2);
+        }
+
+        #search-engine {
+            padding: 0.8rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.8rem;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #search-engine:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* 统一按钮样式 */
+        button {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        #search-button {
+            background: rgba(108, 122, 224, 0.15);
+            border-color: rgba(108, 122, 224, 0.2);
+        }
+
+        #search-button:hover {
+            background: rgba(108, 122, 224, 0.25);
+        }
+
+        .add-btn {
+            background: rgba(76, 175, 80, 0.15);
+            border-color: rgba(76, 175, 80, 0.2);
+        }
+
+        .add-btn:hover {
+            background: rgba(76, 175, 80, 0.25);
+        }
+
+        .delete-btn {
+            background: rgba(255, 107, 107, 0.15);
+            border-color: rgba(255, 107, 107, 0.2);
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 107, 107, 0.25);
+        }
+
+        .bookmark-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .bookmark-input {
+            padding: 0.8rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .bookmark-input:focus {
+            border-color: var(--success-color);
+        }
+
+        #bookmark-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .bookmark-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 0.8rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .bookmark-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .bookmark-item a {
+            flex: 1;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .menu-btn {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.8rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 2;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .menu-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .menu {
+            position: fixed;
+            left: 20px;
+            bottom: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.8rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 2;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .menu-item {
+            padding: 0.6rem 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+                border-radius: 1rem;
+            }
+
+            .search-group {
+                flex-direction: column;
+            }
+
+            #search-engine, #search-button {
+                width: 100%;
+            }
+
+            .bookmark-form {
+                grid-template-columns: 1fr;
+            }
+
+            .bookmark-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .delete-btn {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px;
+            }
+
+            .container {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            #search-box {
+                min-width: unset;
+            }
+
+            .menu-btn {
+                left: 10px;
+                bottom: 10px;
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .menu {
+                left: 10px;
+                bottom: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-layer"></div>
+    
+    <div class="container">
+        <!-- 搜索部分 -->
+        <div class="search-group">
+            <input type="text" id="search-box" placeholder="输入搜索内容...">
+            <select id="search-engine">
+                <option value="google">谷歌</option>
+                <option value="baidu">百度</option>
+                <option value="sogou">搜狗</option>
+            </select>
+            <button id="search-button"> 搜索</button>
+        </div>
+
+        <!-- 收藏夹部分 -->
+        <div class="bookmark-form">
+            <input type="text" id="bookmark-name" class="bookmark-input" placeholder="网站名称">
+            <input type="url" id="bookmark-url" class="bookmark-input" placeholder="https://example.com">
+            <button onclick="addBookmark()" class="add-btn"> 添加</button>
+        </div>
+        <ul id="bookmark-list"></ul>
+    </div>
+
+    <!-- 菜单按钮 -->
+    <button class="menu-btn" onclick="toggleMenu()">菜单</button>
+
+    <!-- 一级菜单 -->
+    <div class="menu" id="menu">
+        <div class="menu-item" onclick="uploadBackground()">上传背景</div>
+        <div class="menu-item" onclick="resetBackground()">恢复默认背景</div>
+    </div>
+
+    <!-- 文件上传输入框 -->
+    <input type="file" id="file-input" accept="image/*" style="display: none;">
+
+<script>
+    // 搜索功能
+    function performSearch() {
+        const searchQuery = document.getElementById('search-box').value;
+        const searchEngine = document.getElementById('search-engine').value;
+
+        const engines = {
+            google: `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`,
+            baidu: `https://www.baidu.com/s?wd=${encodeURIComponent(searchQuery)}`,
+            sogou: `https://www.sogou.com/web?query=${encodeURIComponent(searchQuery)}`
+        };
+
+        window.open(engines[searchEngine] || engines.google, '_blank');
+    }
+
+    document.getElementById('search-button').addEventListener('click', performSearch);
+
+    // 按下 Enter 键执行搜索
+    document.getElementById('search-box').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
+    // 收藏夹功能
+    let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+
+    function saveBookmarks() {
+        localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    }
+
+    function renderBookmarks() {
+        const list = document.getElementById('bookmark-list');
+        list.innerHTML = bookmarks.map((item, index) => `
+            <li class="bookmark-item">
+                <a href="${item.url}" target="_blank">${item.name}</a>
+                <button class="delete-btn" onclick="deleteBookmark(${index})">删除</button>
+            </li>
+        `).join('');
+    }
+
+    function addBookmark() {
+        const name = document.getElementById('bookmark-name').value.trim();
+        let url = document.getElementById('bookmark-url').value.trim();
+
+        if (!name || !url) return alert('请填写完整信息');
+        if (!url.startsWith('http')) url = `http://${url}`;
+
+        bookmarks.push({ name, url });
+        saveBookmarks();
+        renderBookmarks();
+        
+        document.getElementById('bookmark-name').value = '';
+        document.getElementById('bookmark-url').value = '';
+    }
+
+    function deleteBookmark(index) {
+        if (confirm('确定要删除这个收藏吗？')) {
+            bookmarks.splice(index, 1);
+            saveBookmarks();
+            renderBookmarks();
+        }
+    }
+
+    // 初始化
+    renderBookmarks();
+
+    // 上传背景图片并毛玻璃化
+    function uploadBackground() {
+        document.getElementById('file-input').click();
+    }
+
+    document.getElementById('file-input').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                // 创建新的背景层
+                const newBackgroundLayer = document.createElement('div');
+                newBackgroundLayer.className = 'background-layer';
+                newBackgroundLayer.style.background = `url(${event.target.result}) center/cover no-repeat`;
+                newBackgroundLayer.style.backdropFilter = 'blur(8px)';
+                newBackgroundLayer.style.webkitBackdropFilter = 'blur(8px)';
+
+                // 移除旧的背景层
+                const oldBackgroundLayer = document.querySelector('.background-layer');
+                if (oldBackgroundLayer) {
+                    document.body.removeChild(oldBackgroundLayer);
+                }
+
+                // 添加新的背景层
+                document.body.appendChild(newBackgroundLayer);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // 恢复默认背景
+    function resetBackground() {
+        const oldBackgroundLayer = document.querySelector('.background-layer');
+        if (oldBackgroundLayer) {
+            document.body.removeChild(oldBackgroundLayer);
+        }
+
+        const defaultBackgroundLayer = document.createElement('div');
+        defaultBackgroundLayer.className = 'background-layer';
+        defaultBackgroundLayer.style.background = 'linear-gradient(135deg, #000000, #333333, #666666, #ffffff)';
+        defaultBackgroundLayer.style.backdropFilter = 'blur(8px)';
+        defaultBackgroundLayer.style.webkitBackdropFilter = 'blur(8px)';
+
+        document.body.appendChild(defaultBackgroundLayer);
+    }
+
+    // 切换菜单显示
+    function toggleMenu() {
+        const menu = document.getElementById('menu');
+        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // 点击页面其他区域关闭菜单
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('menu');
+        const menuBtn = document.querySelector('.menu-btn');
+        if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
+            menu.style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>
