@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>备忘录</title>
+  <style>@import url("css.css");
+:root {
+  --font: "Segoe UI", sans-serif;
+  --heading: "Josefin Sans", sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: var(--font);
+}
+
+* {
+  box-sizing: inherit;
+}
+*:before, *:after {
+  box-sizing: inherit;
+}
+
+.wrapper {
+  width: 400px;
+  max-width: 100%;
+  background: white;
+  box-shadow: 0 0 0 6px white, 0 10px 38px rgba(0, 0, 0, 0.3);
+  max-width: 100%;
+  border: 2px solid #01807C;
+}
+.wrapper h2 {
+  text-align: center;
+  font-weight: 900;
+  position: relative;
+  z-index: 1;
+  font-size: 30px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: var(--heading);
+}
+.wrapper h2::after {
+  content: "";
+  display: block;
+  width: 222px;
+  height: 10px;
+  background: rgba(1, 126, 122, 0.2);
+  position: absolute;
+  left: 50%;
+  margin-left: -112px;
+  top: 20px;
+  z-index: -1;
+}
+.wrapper .plates {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  list-style: none;
+}
+.wrapper .plates li {
+  border-bottom: 2px solid rgba(144, 132, 132, 0.15);
+  position: relative;
+  transition: all 2000ms ease;
+}
+.wrapper .plates li input[type=checkbox] {
+  opacity: 0;
+  position: absolute;
+  top: 10px;
+  left: 17px;
+}
+.wrapper .plates li input[type=checkbox]:checked + label {
+  background: #f9f9f9;
+  text-decoration: line-through;
+  font-weight: 700;
+}
+.wrapper .plates li input[type=checkbox]:checked + label::before {
+  background: #01807c;
+}
+.wrapper .plates li input[type=checkbox]:checked + label::after {
+  opacity: 1;
+}
+.wrapper .plates li input[type=checkbox]:focus + label::before {
+  box-shadow: 0 0 0 3px #c2e0d8;
+}
+.wrapper .plates li label {
+  display: block;
+  width: 100%;
+  padding: 0.5em 1em 0.6em 3.3em;
+  margin: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 200ms ease;
+  color: #4e4e4e;
+  cursor: pointer;
+  font-weight: 300;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.wrapper .plates li label::before, .wrapper .plates li label::after {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+.wrapper .plates li label::before {
+  width: 17px;
+  height: 17px;
+  border: 2px solid #01807c;
+  left: 18px;
+  top: 11px;
+}
+.wrapper .plates li label::after {
+  width: 5px;
+  height: 10px;
+  left: 24px;
+  top: 13px;
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+  transform: rotate(45deg);
+  opacity: 0;
+}
+.wrapper .plates li:hover label::before {
+  background: #bbddd4;
+}
+.wrapper .plates li:hover label::after {
+  opacity: 1;
+  border-color: #01807c;
+}
+.wrapper .plates li:hover input[type=checkbox]:checked + label::after {
+  border-color: white;
+  opacity: 0.6;
+}
+.wrapper .setting {
+  margin-top: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wrapper .setting input[type=button] {
+  background: transparent;
+  color: #01807C;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  flex-grow: 1;
+  opacity: 0.4;
+  transition: all 200ms ease;
+  border: 1px dotted transparent;
+  font-family: var(--font);
+  font-weight: 100;
+  font-size: 14px;
+}
+.wrapper .setting input[type=button]:hover {
+  opacity: 1;
+}
+.wrapper .setting input[type=button]:active {
+  background: rgba(1, 126, 122, 0.08);
+  position: relative;
+  top: 1px;
+}
+.wrapper .setting input[type=button]:focus {
+  border: 1px dotted #017e7a;
+  outline: 0;
+}
+.wrapper .add-items {
+  margin-top: 1.5em;
+  display: flex;
+}
+.wrapper .add-items input {
+  background: #01807C;
+  color: white;
+  font-family: var(--heading);
+  font-weight: 400;
+  font-size: 24px;
+  border: 1px dotted transparent;
+}
+.wrapper .add-items input:focus {
+  border: 1px dotted rgba(255, 255, 255, 0.5);
+  outline: 0;
+}
+.wrapper .add-items input[type=text] {
+  padding: 14px 18px 8px;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+.wrapper .add-items input[type=text]::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+.wrapper .add-items input[type=text]:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+.wrapper .add-items input[type=text]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+.wrapper .add-items input[type=submit] {
+  padding-right: 18px;
+  padding-left: 30px;
+  cursor: pointer;
+}
+.wrapper .add-items input[type=submit]:active {
+  position: relative;
+  top: 1px;
+}</style>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="wrapper">
+  <h2>备忘录</h2>
+<p><b>请不要尝试删除Cookies,可能会删除你的记录</b></p>
+  <ul class="plates">
+    <li>加载中</li>
+  </ul>
+  <div class="setting">
+    <input type="button" value="全部完成" data-value="checkAll">
+    <input type="button" value="全部取消完成" data-value="uncheckAll">
+    <input type="button" value="清除全部" data-value="clearAll">
+  </div>
+  <form class="add-items">
+    <input type="text" name="item" placeholder="新备忘" autocomplete="off" required="">
+    <input type="submit" value="+">
+  </form>
+<p>Made by <a href="https://borisy.bar">Borisy</a>.No copyright</p>
+</div>
+<!-- partial -->
+  <script>const addItems = document.querySelector('.add-items');
+const itemsList = document.querySelector('.plates');
+const listSetting = document.querySelector('.setting');
+const items = JSON.parse(localStorage.getItem('items')) || [];
+
+function addItem(e) {
+	e.preventDefault();
+	let input = this.querySelector('input[name=item]');
+	let item = {
+		text: input.value,
+		done: false
+	};
+
+	items.push(item);
+	populateList(items, itemsList);
+	localStorage.setItem("items", JSON.stringify(items));
+	this.reset();
+	input.focus();
+}
+
+function populateList(plates = [], platesList)  {
+	platesList.innerHTML =  plates.map((plate, i) => {
+		return `
+			<li>
+			    <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? "checked" : ""}/>
+				<label for="item${i}">${plate.text}</label>
+			</li>
+		`
+	}).join('');
+}
+
+function toggleDone(e) {
+	if (e.target.tagName != 'INPUT') return;
+	// or if (!e.target.matches('input')) return;
+	let item = e.target;
+	let index = item.dataset.index;
+	console.log("Item was: " + items[index].done);
+	items[index].done = !items[index].done;
+	localStorage.setItem("items", JSON.stringify(items));
+	setTimeout(()=> populateList(items, itemsList), 1000);
+	console.log("Now is: " + items[index].done);
+	
+}
+
+function handleSetting(e) {
+	if (e.target.tagName != 'INPUT') return;
+	let button = e.target;
+
+	if(button.dataset.value === "checkAll") checkAll();
+	if(button.dataset.value === "uncheckAll") uncheckAll();
+	if(button.dataset.value === "clearAll") clearAll();
+}
+
+function checkAll() {
+	items.forEach(item => {
+		if(!item.done) {
+			console.log(item.done);
+			item.done = true;
+			console.log(item.done);
+		}
+	});
+	localStorage.setItem("items", JSON.stringify(items));
+	populateList(items, itemsList);
+	
+}
+
+function uncheckAll() {
+	items.forEach(item => {
+		if(item.done) {
+			console.log(item.done);
+			item.done = false;
+			console.log(item.done);
+		}
+	});
+	localStorage.setItem("items", JSON.stringify(items));
+	populateList(items, itemsList);
+}
+
+function clearAll() {
+/* 	items.forEach( (item, index) => {
+		if(item.done) {
+			items.splice(index, 1);
+			localStorage.setItem("items", JSON.stringify(items));
+			populateList(items, itemsList);
+		}
+		
+	}); */
+	
+	items.length = 0;
+	localStorage.clear();
+	populateList(items, itemsList); 
+}
+
+addItems.addEventListener('submit', addItem);
+itemsList.addEventListener('click', toggleDone);
+listSetting.addEventListener('click', handleSetting);
+
+(document.querySelector('input[name=item]')).focus();
+
+populateList(items, itemsList);</script>
+
+</body>
+</html>
